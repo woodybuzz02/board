@@ -4,6 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.board.domain.RoleType;
 import com.example.board.domain.Users;
 import com.example.board.domain.UsersRepository;
 
@@ -21,7 +22,7 @@ public class AuthService {
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
-        user.setRole("ROLE_USER");
+        user.setRole(RoleType.USER);
         Users userEntity = usersRepository.save(user);
         return userEntity;
     }

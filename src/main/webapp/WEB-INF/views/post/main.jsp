@@ -15,21 +15,13 @@
       </tr>
     </thead>
     <tbody>
+    <c:forEach var="post" items="${posts}">
       <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
+        <td>${post.title}</td>
+        <td>${post.user.username}</td>
+        <td>${post.createAt}</td>
       </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
+    </c:forEach>
     </tbody>
   </table>
 </div>

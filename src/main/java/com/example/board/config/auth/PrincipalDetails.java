@@ -22,10 +22,15 @@ private static final long serialVersionUID = 1L;
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		 Collection<GrantedAuthority> collector = new ArrayList<>();
 	        collector.add(() -> {
-	            return user.getRole();
+	            return "ROLE_" + user.getRole();
 	        });
 	     return collector;
 	}
+	
+	public Users getUser() {
+		return user;
+	}
+	
 
 	@Override
 	public String getPassword() {
