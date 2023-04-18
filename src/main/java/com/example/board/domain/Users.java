@@ -39,17 +39,14 @@ public class Users extends BaseEntity{
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String nickname;
-
     private int zipcode;
     
     private String steetAdr;
     
-//    @ColumnTransformer(
-//            read = "convert_from(decrypt(decode(detail_adr,'hex'),'ENC_KEY','aes'),'utf8')",
-//            write = "encode(encrypt(convert_to(?,'utf8'),'ENC_KEY','aes'),'hex')"
-//    )
+    @ColumnTransformer(
+            read = "convert_from(decrypt(decode(detail_adr,'hex'),'ENC_KEY','aes'),'utf8')",
+            write = "encode(encrypt(convert_to(?,'utf8'),'ENC_KEY','aes'),'hex')"
+    )
     private String detailAdr;
     
     @Enumerated(EnumType.STRING)

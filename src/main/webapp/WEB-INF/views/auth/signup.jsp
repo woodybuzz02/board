@@ -7,19 +7,19 @@
 	<form action="/auth/signup" method="post">
 	  <div class="form-group">
 	    <label for="username">Username:</label>
-	    <input type="text" class="form-control" placeholder="Enter username" name="username" id="username" required="required">
+	    <input type="text" class="form-control" placeholder="Enter username" name="username" id="username" required="required" onchange="checkUsername()">
+	    <!-- id 중복체크 -->
+			<span class="username_ok" id="usernameOk">사용 가능한 유저네임입니다.</span>
+			<span class="username_already" id="usernameAlready">누군가 이 유저네임을 사용하고 있어요.</span>
+		<!-- id 중복체크 end -->
 	  </div>
 	  <div class="form-group">
 	    <label for="email">Email address:</label>
-	    <input type="email" class="form-control" placeholder="Enter email" name="email" id="email" required="required">
+	    <input type="email" class="form-control" placeholder="Enter email" name="email" id="email">
 	  </div>
 	  <div class="form-group">
 	    <label for="password">Password:</label>
 	    <input type="password" class="form-control" placeholder="Enter password" name="password" id="password" required="required">
-	  </div>
-	   <div class="form-group">
-	    <label for="nickname">Nickname:</label>
-	    <input type="text" class="form-control" placeholder="Enter nickname" name="nickname" id="nickname" required="required" />
 	  </div>
 	  <div class="form-group">
 	    <label for="zipcode">zipcode:</label>
