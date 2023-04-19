@@ -19,6 +19,8 @@
 	  <button class="btn btn-primary">로그인</button>
 	</form>
 	
+	<br>
+	
 	<!--로그인 오류시 메시지-->
 	<span> 
 		<c:if test="${error}">

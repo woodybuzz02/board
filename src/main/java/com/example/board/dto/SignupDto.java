@@ -19,7 +19,7 @@ public class SignupDto {
     
     private String email;
     
-    private int zipcode;
+    private String zipcode;
     
     private String steetAdr;
     

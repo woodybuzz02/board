@@ -9,6 +9,7 @@ public class PageMaker {
 	private boolean prev;
 	private boolean next;
 	private int displayPageNum = 5;
+	private int postNum;
 	
 	public Criteria getCri() {
 		return cri;
@@ -70,5 +71,13 @@ public class PageMaker {
     public void setDisplayPageNum(int displayPageNum) {
         this.displayPageNum = displayPageNum;
     }
+    
+	public void setPostNum(Criteria cri, int totalCount) {
+		this.postNum = totalCount - (cri.getPage()-1) * cri.getPerPageNum();
+	}
+	
+	public int getPostNum() {
+		return postNum;
+	}
 	
 }

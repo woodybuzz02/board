@@ -5,7 +5,7 @@
 
 	<div class="container">
 		<button class="btn btn-secondary" onclick="history.back()">글목록</button>
-		<button id="btn-share" class="btn btn-secondary">공유하기</button>		
+		<button id="btn-share" class="btn btn-secondary" onclick="sharePost(${post.id})">공유하기</button>		
 		<c:choose>
 			<c:when test = "${empty sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}">
 			</c:when>

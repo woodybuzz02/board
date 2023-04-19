@@ -19,6 +19,7 @@ spring:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
+    
 server:
   # true로 설정 시, JSP 파일 수정 시 서버 재시작 없이 바로 적용
   servlet:

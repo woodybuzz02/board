@@ -36,6 +36,8 @@ public class PostController {
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(total);
+		pageMaker.setPostNum(cri, total);
+		
 		List<Map<String,Object>> list = postsService.selectPostList(cri);
 		
 		model.addAttribute("list", list);

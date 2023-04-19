@@ -12,19 +12,11 @@ function deletePost(postId) {
 	});
 }
 
-var share = document.getElementById('btn-share');
-
-share.addEventListener("click", async () => {
-  try {
-    await navigator.share({
-      title: $("#title").val(),
-      text: $("#content").val(),
-      url: `/post/${postId}`,
-    });
-    console.log("공유 성공");
-  } catch (e) {
-    console.log("공유 실패");
-  }
-});
-
-// Web Share API는 HTTPS 환경에서만 사용 가능하며 _사용자의 직접적인 액션으로만 호출_할 수 있습니다. 어떻게 해야되징...? https 적용해야될듯...
+// post 공유
+function sharePost(postId) {
+	window.navigator.share({
+	  title: $("#title").val(), // 공유될 제목
+	  text: $("#content").val(), // 공유될 설명
+	  url: `post/${postId}` // 공유될 URL
+	});
+}

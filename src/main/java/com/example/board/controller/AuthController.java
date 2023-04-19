@@ -2,7 +2,6 @@ package com.example.board.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,7 @@ import com.example.board.domain.Users;
 import com.example.board.dto.CMRespDto;
 import com.example.board.dto.SignupDto;
 import com.example.board.service.AuthService;
+import com.example.board.service.MailService;
 import com.example.board.service.UsersService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +27,7 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final UsersService usersService;
+	private final MailService mailService;
 	
     @GetMapping("/auth/signin")
     public String signinForm(@RequestParam(value = "error", required = false) String error,
@@ -49,11 +50,19 @@ public class AuthController {
         return "auth/signin";
     }
 
-    //유저네임 중복확인 
     @PostMapping("/auth/usernameCheck")
     @ResponseBody
     public ResponseEntity<?> usernameCheck(@RequestParam("username") String username) {
         boolean chq = usersService.usernameCheck(username);
         return new ResponseEntity<>(new CMRespDto<>(1, "유저네임 중복 확인 성공!", chq), HttpStatus.OK);
     }
+    
+    @PostMapping("/auth/signup/mailConfirm")
+    @ResponseBody
+    String mailConfirm(String email) throws Exception {
+       String code = mailService.sendSimpleMessage(email);
+       return code;
+    }
+
+    
 }

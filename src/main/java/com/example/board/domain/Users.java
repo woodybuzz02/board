@@ -39,7 +39,7 @@ public class Users extends BaseEntity{
     @Column(nullable = false)
     private String password;
 
-    private int zipcode;
+    private String zipcode;
     
     private String steetAdr;
     

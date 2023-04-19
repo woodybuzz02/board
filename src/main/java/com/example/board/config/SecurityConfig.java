@@ -6,10 +6,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
+	private final AuthenticationFailureHandler customAuthFailureHandler;
 
     @Bean
     public BCryptPasswordEncoder encode() {
@@ -25,7 +31,8 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/auth/signin")
                 .loginProcessingUrl("/auth/signin")
-                .defaultSuccessUrl("/");
+                .defaultSuccessUrl("/")
+        		.failureHandler(customAuthFailureHandler);
         return http.build();
     }
 	

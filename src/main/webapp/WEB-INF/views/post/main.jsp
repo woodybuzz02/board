@@ -11,20 +11,24 @@
   <table class="table" style="table-layout: fixed">
     <thead>
       <tr>
+      	<th width="10%">번호</th>
         <th width="70%">글 제목</th>
-        <th width="10%">작성자</th>
+        <th width="15%">작성자</th>
         <th width="20%">작성일</th>
       </tr>
     </thead>
     <tbody>
     <c:choose>
         <c:when test="${fn:length(list) > 0 }">
+        	<c:set var="num" value="${pageMaker.postNum }"/>
             <c:forEach items="${list }" var="pList">
                 <tr>
+                <td>${num }</td>
                 <td onClick="location.href='/post/${pList.id}'">${pList.title }</td>
                 <td>${pList.writer}</td>
                 <td>${pList.created_at }</td>
               </tr>
+            <c:set var="num" value="${num-1 }"></c:set>
             </c:forEach>
         </c:when>
         <c:otherwise>
