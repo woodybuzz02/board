@@ -1,9 +1,5 @@
 package com.example.board.domain;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,10 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.example.board.util.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,28 +22,28 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper=false)
-public class Posts extends BaseEntity{
+public class Replys extends BaseEntity{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id; // 댓글의 ID
 	
-	@Column(nullable = false)
-	private String title;
-	
-	@Column(nullable = false)
 	private String content;
 	
-	private int slangCode;
+	private int parentReplyId; // 대댓글의 경우 모댓글의 id를 저장하여 누구의 대댓글인지 확인
+	
+	private int replyGroup; // 그룹 그룹과 부모댓글id는 항상 같다.
+	
+	private int depth; // 댓글의 깊이 일반 댓글은 0, 대댓글은 1
+	
+	private int replyOrder; // 댓글 순서
 	
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Users user;
-    
-    @JsonIgnoreProperties({ "post" })
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    // 최상위 객체인 게시글이 삭제되면 그 게시글에 등록되어있던 댓글들 모두 삭제
-    // mappedBy 설정으로 연관관계의 주인 설정! 
-    private List<Replys> replys;
-	
+
+    @JoinColumn(name = "post_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Posts post;
+
 }
