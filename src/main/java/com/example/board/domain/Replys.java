@@ -1,5 +1,7 @@
 package com.example.board.domain;
 
+import java.util.Optional;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 import com.example.board.util.BaseEntity;
 
@@ -22,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper=false)
-public class Replys extends BaseEntity{
+public class Replys extends BaseEntity{ // 댓글 글번호, 게시글 글번호, 댓글 작성자, 댓글 작성일, 부모글, 댓글 내용
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +48,13 @@ public class Replys extends BaseEntity{
     @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Posts post;
+    
+    public void changeGroup(int replyGroup) {
+    	this.replyGroup = replyGroup+1;
+    }
+    
+    public void changeOrder(Integer findedReplyOrder) {
+    	this.replyOrder = findedReplyOrder+1;
+    }
 
 }

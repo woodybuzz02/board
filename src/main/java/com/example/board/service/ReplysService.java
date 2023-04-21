@@ -1,8 +1,6 @@
 package com.example.board.service;
 
-import java.util.HashMap;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +8,7 @@ import com.example.board.domain.Replys;
 import com.example.board.domain.ReplysRepository;
 import com.example.board.domain.Users;
 import com.example.board.domain.UsersRepository;
+import com.example.board.dto.ReplyDto;
 import com.example.board.handler.ex.CustomApiException;
 import com.example.board.domain.Posts;
 
@@ -24,45 +23,34 @@ public class ReplysService {
 	
 	// 댓글 구현
     @Transactional
-    public Replys saveReplys(String content, int postId, int userId, int order) {
+    public Replys saveReplys(ReplyDto replyDto, int userId) {
 
         Posts post = new Posts();
-        post.setId(postId);
+        post.setId(replyDto.getPostId());
 
         Users userEntity = usersRepository.findById(userId).orElseThrow(() -> {
             throw new CustomApiException("유저 아이디를 찾을 수 없습니다.");
         });
-
-        Replys reply = new Replys();
-        reply.setParentReplyId(postId);
-        reply.setDepth(0);
-        reply.setReplyGroup(postId);
-        reply.setContent(content);
-        reply.setPost(post);
-        reply.setUser(userEntity);
-        reply.setReplyOrder(order);
-
-        return replysRepository.save(reply);
-    }
-    
-    @Transactional
-    public Replys saveChildReplys(String content, int postId, int UserId, int order) {
-    	
-    	Posts post = new Posts();
-        post.setId(postId);
-
-        Users userEntity = usersRepository.findById(UserId).orElseThrow(() -> {
-            throw new CustomApiException("유저 아이디를 찾을 수 없습니다.");
-        });
         
         Replys reply = new Replys();
-        reply.setParentReplyId(postId);
-        reply.setDepth(1);
-        reply.setContent(content);
+        reply.setDepth(replyDto.getDepth());
+        reply.setContent(replyDto.getContent());
         reply.setPost(post);
         reply.setUser(userEntity);
-        reply.setReplyOrder(order);
-    	
+        reply.setReplyOrder(replyDto.getReplyOrder());
+        
+        if(replyDto.getDepth() == 0) {
+        	Integer replyGroup = replysRepository.findReplyGroup().orElse(0);
+            // commentGroup의 max를 찾은 후 없으면(null이면) 0을 반환하고 0 이상이 있다면 changeGroup을 통해서 1씩 증가시킨다.
+        	reply.changeGroup(replyGroup);
+        	reply.setReplyOrder(0);
+
+        }else {
+        	reply.setReplyGroup(replyDto.getReplyGroup());
+        	reply.setParentReplyId(replyDto.getParentReplyId());
+        	reply.setReplyOrder(replysRepository.findReplyOrder(replyDto.getReplyGroup(), replyDto.getPostId()));
+        }
+        
         return replysRepository.save(reply);
     }
 

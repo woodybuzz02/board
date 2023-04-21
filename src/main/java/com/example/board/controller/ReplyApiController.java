@@ -28,15 +28,13 @@ public class ReplyApiController {
 	
 	private final ReplysService replysService;
 	
-	// 부모댓글 저장
-	@PostMapping("/api/reply")
-	public ResponseEntity<?> saveReply(@Valid @RequestBody ReplyDto replyDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principal){
+	// 댓글 저장
+	@PostMapping("/api/reply/{depth}")
+	public ResponseEntity<?> saveReply(@Valid @RequestBody ReplyDto replyDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principal, @PathVariable int depth){
 		
-        Replys reply = replysService.saveReplys(replyDto.getContent(), replyDto.getPostId(), principal.getUser().getId(), replyDto.getReplyOrder());
-        
-        System.out.println(principal.getUser().getId());
+        Replys reply = replysService.saveReplys(replyDto, principal.getUser().getId());
 		
-		return new ResponseEntity<>(new CMRespDto<>(1, "부모댓글 저장 성공!", reply), HttpStatus.OK);
+		return new ResponseEntity<>(new CMRespDto<>(1, "댓글 저장 성공!", reply), HttpStatus.OK);
 	}
 	
 	// 게시글 댓글 보기

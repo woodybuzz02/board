@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ReplyDto {
+public class ChildReplyDto {
 	
     @NotBlank // 빈값이거나 null 체크 그리고 빈 공백
     private String content;
@@ -16,11 +16,5 @@ public class ReplyDto {
 
     @NotNull // 빈값이거나 null 체크
     private int replyOrder;
-    
-    private int parentReplyId;
-    
-    private int replyGroup;
-    
-    private int depth;
 
 }
