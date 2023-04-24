@@ -37,7 +37,6 @@ public class ReplysService {
         reply.setContent(replyDto.getContent());
         reply.setPost(post);
         reply.setUser(userEntity);
-        reply.setReplyOrder(replyDto.getReplyOrder());
         
         if(replyDto.getDepth() == 0) {
         	Integer replyGroup = replysRepository.findReplyGroup().orElse(0);
@@ -48,12 +47,15 @@ public class ReplysService {
         }else {
         	reply.setReplyGroup(replyDto.getReplyGroup());
         	reply.setParentReplyId(replyDto.getParentReplyId());
-        	reply.setReplyOrder(replysRepository.findReplyOrder(replyDto.getReplyGroup(), replyDto.getPostId()));
+        	Integer replyOrder = replysRepository.findReplyOrder(replyDto.getReplyGroup(), replyDto.getPostId()).orElse(0);
+        	reply.changeOrder(replyOrder);
+        	System.out.println(reply.getReplyOrder()); 
         }
         
         return replysRepository.save(reply);
     }
 
+    // 댓글 불러오기
     @Transactional(readOnly = true)
 	public List<Replys> findAllReply(int postId) {
     	
@@ -61,5 +63,66 @@ public class ReplysService {
     	
 		return replys;
 	}
+    
+    // 댓글 수정
+    @Transactional
+    public Replys updateReplys(int replyId, ReplyDto replyDto, int userId) {
+    	
+    	Replys reply = replysRepository.findById(replyId).orElseThrow(() -> {
+            throw new CustomApiException("해당 댓글은 없는 댓글입니다.");
+        });
+    	
+        reply.setContent(replyDto.getContent());
+        	 
+        return reply;
+
+    }
+    
+    // 댓글 삭제
+    @Transactional
+    public void deleteReplys(int replyId, int userId) {
+    	
+    	Replys reply = replysRepository.findById(replyId).orElseThrow(() -> {
+            throw new CustomApiException("해당 댓글은 없는 댓글입니다.");
+        });
+    	
+    	Integer countChild = replysRepository.countChildList(reply.getId()).orElse(0);
+    	
+    	// 부모댓글인 경우
+    	if(reply.getParentReplyId() == 0) {
+		
+    		// 자식댓글이 있을 경우
+    		if(countChild != 0) {
+    			reply.setContent("삭제된 댓글입니다.");
+    		}else{// 자식댓글이 없을 경우	
+    			replysRepository.deleteById(reply.getId());
+    		}	
+    		
+    	}else { // 자식댓글인 경우
+    		
+    		Replys parentReply = replysRepository.findById(reply.getParentReplyId()).orElseThrow(() -> {
+                throw new CustomApiException("해당 댓글은 없는 댓글입니다.");
+            });
+    		
+    		countChild = replysRepository.countChildList(parentReply.getId()).orElse(0);
+    		
+    		System.out.println(parentReply.getContent());
+    		
+    		// 부모댓글이 없을 경우(=content의 내용이 "삭제된 댓글입니다."인 경우)
+    		if(parentReply.getContent().equals("삭제된 댓글입니다.")) { 
+    			System.out.println("countChild: "+countChild);
+    			System.out.println("parentReplyId: "+parentReply.getId());
+    			if(countChild != 1) { // 다른 자식댓글이 있는 경우
+    				replysRepository.deleteById(reply.getId());
+        		}else if(countChild == 1){// 다른 자식댓글이 없을 경우
+        			replysRepository.deleteById(parentReply.getId()); // 부모댓글 삭제
+        			replysRepository.deleteById(reply.getId()); // 자식댓글 삭제
+        		}	
+    		}else { // 부모댓글이 있는 경우
+    			replysRepository.deleteById(reply.getId());
+    		}
+    		
+    	}
+    }
     
 }

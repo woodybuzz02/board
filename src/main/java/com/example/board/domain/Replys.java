@@ -1,7 +1,5 @@
 package com.example.board.domain;
 
-import java.util.Optional;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 
 import com.example.board.util.BaseEntity;
 
@@ -53,8 +50,7 @@ public class Replys extends BaseEntity{ // 댓글 글번호, 게시글 글번호
     	this.replyGroup = replyGroup+1;
     }
     
-    public void changeOrder(Integer findedReplyOrder) {
+    public void changeOrder(int findedReplyOrder) {
     	this.replyOrder = findedReplyOrder+1;
     }
-
 }

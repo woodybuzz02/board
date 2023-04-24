@@ -52,7 +52,7 @@
 						<textarea class="form-control" id="replyContent" rows="4" cols="70"></textarea>
 					</div>
 					<div class="card-footer">
-						<button class="btn btn-primary" onClick="addReply(${post.id},0)">등록</button>
+						<button class="btn btn-primary" onClick="addReply(${post.id},0,0)">등록</button>
 					</div>
 				</div>
 			</c:otherwise>
