@@ -6,7 +6,7 @@
 	<input type="hidden" id="principalId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.user.id}" />
 	<input type="hidden" id="username" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.username}" />
 	<input type="hidden" id="postId" value="${post.id}" />
-
+	
 	<div class="container">
 		<button class="btn btn-secondary" onclick="history.back()">글목록</button>
 		<button id="btn-share" class="btn btn-secondary" onclick="sharePost(${post.id})">공유하기</button>		

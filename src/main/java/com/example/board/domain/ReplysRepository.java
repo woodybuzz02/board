@@ -10,8 +10,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReplysRepository extends JpaRepository<Replys, Integer>{
 
-	@Query(value = "SELECT * FROM replys r WHERE post_id = :postId ORDER BY reply_group ASC, depth ASC, reply_order ASC", nativeQuery = true)
-	List<Replys> findByPostId(@Param("postId") int postId);
+	@Query(value = "SELECT * FROM replys r WHERE post_id = :postId and depth = 0 ORDER BY reply_group ASC, reply_order ASC", nativeQuery = true)
+	List<Replys> findParentReplyByPostId(@Param("postId") int postId);
+	
+	@Query(value = "SELECT * FROM replys r WHERE post_id = :postId and depth = 1 and parent_reply_id = :parentReplyId ORDER BY reply_group ASC, reply_order ASC", nativeQuery = true)
+	List<Replys> findChildReplyByPostId(@Param("postId") int postId, @Param("parentReplyId") int parentReplyId );
 	
 	@Query(value = "SELECT max(r.reply_group) FROM replys r", nativeQuery = true)
 	Optional<Integer> findReplyGroup();

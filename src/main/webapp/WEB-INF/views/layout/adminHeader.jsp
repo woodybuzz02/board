@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,26 +22,16 @@
 	
 
 		<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-			<a class="navbar-brand" href="/post/main">홈</a>
+			<a class="navbar-brand" href="/admin/main">관리자 홈</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="collapsibleNavbar">
-				 <c:choose>
-					<c:when test = "${empty sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}">
-					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link" href="/auth/signin">로그인</a></li>
-						<li class="nav-item"><a class="nav-link" href="/auth/signup">회원가입</a></li>
-					</ul>
-					</c:when>
-					<c:otherwise>
-					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link" href="/post/upload">글쓰기</a></li>
-						<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
-						<li class="nav-item"><a class="nav-link" href="/admin/main">관리자페이지</a></li>
-					</ul>
-					</c:otherwise>
-				</c:choose>
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link" href="">비속어 관리</a></li>
+					<li class="nav-item"><a class="nav-link" href="/admin/user">계정 관리</a></li>
+					<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
+				</ul>
 			</div>
 		</nav>
 		<br>

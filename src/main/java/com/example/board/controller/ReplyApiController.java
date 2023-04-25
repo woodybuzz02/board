@@ -39,13 +39,22 @@ public class ReplyApiController {
 		return new ResponseEntity<>(new CMRespDto<>(1, "댓글 저장 성공!", reply), HttpStatus.OK);
 	}
 	
-	// 게시글 댓글 보기
+	// 게시글 부모 댓글 보기 
 	@GetMapping("/api/{postId}/reply")
-	public ResponseEntity<?> findAllReply(@PathVariable("postId") int postId){
+	public ResponseEntity<?> findParentReply(@PathVariable("postId") int postId){
 		
-		List<Replys> replys = replysService.findAllReply(postId);
+		List<Replys> replys = replysService.findParentReply(postId);
 		
-		return new ResponseEntity<>(new CMRespDto<>(1, "댓글들 보기 성공!", replys), HttpStatus.OK);
+		return new ResponseEntity<>(new CMRespDto<>(1, "부모 댓글들 보기 성공!", replys), HttpStatus.OK);
+	}
+	
+	// 게시글 자식 댓글 보기
+	@GetMapping("/api/{postId}/reply/{parentReplyId}")
+	public ResponseEntity<?> findChildReply(@PathVariable("postId") int postId, @PathVariable("parentReplyId") int parentReplyId){
+		
+		List<Replys> replys = replysService.findChildReply(postId, parentReplyId);
+		
+		return new ResponseEntity<>(new CMRespDto<>(1, "자식 댓글들 보기 성공!", replys), HttpStatus.OK);
 	}
 	
 	// 댓글 수정

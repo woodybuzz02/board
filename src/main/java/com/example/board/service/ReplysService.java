@@ -55,11 +55,20 @@ public class ReplysService {
         return replysRepository.save(reply);
     }
 
-    // 댓글 불러오기
+    // 부모 댓글 불러오기
     @Transactional(readOnly = true)
-	public List<Replys> findAllReply(int postId) {
+	public List<Replys> findParentReply(int postId) {
     	
-    	List<Replys> replys = replysRepository.findByPostId(postId);
+    	List<Replys> replys = replysRepository.findParentReplyByPostId(postId);
+    	
+		return replys;
+	}
+    
+    // 자식 댓글 불러오기
+    @Transactional(readOnly = true)
+	public List<Replys> findChildReply(int postId, int parentReplyId) {
+    	
+    	List<Replys> replys = replysRepository.findChildReplyByPostId(postId, parentReplyId);
     	
 		return replys;
 	}

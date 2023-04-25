@@ -28,17 +28,12 @@ function findAllReply() {
 						<!-- 아이디, 작성날짜 -->
 						<td width="150">
 							<div>`;
-			if(reply.depth == 0){
-				items2 += `&nbsp ${reply.user.username}<br>
+			
+			items2 += `&nbsp ${reply.user.username}<br>
 								<font size="2" color="lightgray">${reply.createdAt}</font>
 							</div>
 						<td>`;
-			}else{
-				items2 += `&nbsp >> ${reply.user.username}<br>
-								<font size="2" color="lightgray">${reply.createdAt}</font>
-							</div>
-						<td>`;
-			}
+			
 			items2 += 	`<!-- 본문내용 -->
 						<td width="800">
 							<div class="text_wrapper" id="replyContent-${reply.id}" >
@@ -48,7 +43,9 @@ function findAllReply() {
 						<!-- 버튼 -->
 						<td width="100">`;
 			if (principalId == "" || principalId == null || reply.content === "삭제된 댓글입니다.") {
-				items2 += `</td>
+				items2 += `
+					<a href="#" onclick="findChildReply(${reply.id})">[더보기]</a>
+					</td>
 					</tr>	
 			`;
 			} else {
@@ -59,7 +56,7 @@ function findAllReply() {
 							items2 += `
 										<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
 										<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
-										<a href="#" >[더보기]</a>
+										<a href="#" onclick="findChildReply(${reply.id})">[더보기]</a>
 										</div>
 									</td>
 								</tr>	`;
@@ -79,11 +76,11 @@ function findAllReply() {
 }
 
 // 대댓글 보기
-function findChildReply() {
+function findChildReply(parentReplyId) {
 	
 	$.ajax({
 		type: "get",
-		url: `/api/${postId}/reply`,
+		url: `/api/${postId}/reply/${parentReplyId}`,
 		dataType: "json"
 	}).done(res => {
 		let replys = res.data
@@ -91,28 +88,17 @@ function findChildReply() {
 		
 		res.data.forEach((reply) => {
 			
-			let items1 = `<div id="postReplyInput-${reply.id}">
-				</div>`
-			
-			$("#readReply").append(items1);
-			
-			let items2 = `
+			let items1 = `
 					<tr>
 						<!-- 아이디, 작성날짜 -->
 						<td width="150">
 							<div>`;
-			if(reply.depth == 0){
-				items2 += `&nbsp ${reply.user.username}<br>
-								<font size="2" color="lightgray">${reply.createdAt}</font>
-							</div>
-						<td>`;
-			}else{
-				items2 += `&nbsp >> ${reply.user.username}<br>
-								<font size="2" color="lightgray">${reply.createdAt}</font>
-							</div>
-						<td>`;
-			}
-			items2 += 	`<!-- 본문내용 -->
+			items1 += `&nbsp >> ${reply.user.username}<br>
+							<font size="2" color="lightgray">${reply.createdAt}</font>
+						</div>
+					<td>`;
+			
+			items1 += 	`<!-- 본문내용 -->
 						<td width="800">
 							<div class="text_wrapper" id="replyContent-${reply.id}" >
 								${reply.content}
@@ -121,25 +107,24 @@ function findChildReply() {
 						<!-- 버튼 -->
 						<td width="100">`;
 			if (principalId == "" || principalId == null || reply.content === "삭제된 댓글입니다.") {
-				items2 += `</td>
+				items1 += `</td>
 					</tr>	
 			`;
 			} else {
-				items2 += `<div id="replyBtn-${reply.id}" style="text-align:center;">
+				items1 += `<div id="replyBtn-${reply.id}" style="text-align:center;">
 							<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
 						<!-- 댓글 작성자만 수정, 삭제 가능하도록 -->`;
 						if (reply.user.id == principalId){
-							items2 += `
+							items1 += `
 										<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
 										<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
-										<a href="#" >[더보기]</a>
 										</div>
 									</td>
 								</tr>	`;
 						}
 			}
 
-			$(`#postReplyInput-${reply.id}`).append(items2);
+			$(`#postReplyInput-${parentReplyId}`).append(items1);
 			
 		});
 		
