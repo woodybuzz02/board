@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +24,7 @@ import com.example.board.domain.Replys;
 import com.example.board.dto.CMRespDto;
 import com.example.board.dto.ReplyDto;
 import com.example.board.service.ReplysService;
+import com.example.board.util.paging.Criteria;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,9 +45,9 @@ public class ReplyApiController {
 	
 	// 게시글 부모 댓글 보기 
 	@GetMapping("/api/{postId}/reply")
-	public ResponseEntity<?> findParentReply(@PathVariable("postId") int postId){
+	public ResponseEntity<?> findParentReply(@PathVariable("postId") int postId, @PageableDefault(size = 10) Pageable pageable){
 		
-		List<Replys> replys = replysService.findParentReply(postId);
+		Page<Replys> replys = replysService.findParentReply(pageable, postId);
 		
 		return new ResponseEntity<>(new CMRespDto<>(1, "부모 댓글들 보기 성공!", replys), HttpStatus.OK);
 	}

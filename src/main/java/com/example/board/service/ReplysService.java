@@ -1,6 +1,9 @@
 package com.example.board.service;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,9 +60,9 @@ public class ReplysService {
 
     // 부모 댓글 불러오기
     @Transactional(readOnly = true)
-	public List<Replys> findParentReply(int postId) {
+	public Page<Replys> findParentReply(Pageable pageable, Integer postId) {
     	
-    	List<Replys> replys = replysRepository.findParentReplyByPostId(postId);
+    	Page<Replys> replys = replysRepository.findParentReplyByPostId(pageable, postId);
     	
 		return replys;
 	}

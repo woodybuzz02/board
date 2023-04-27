@@ -7,7 +7,7 @@
 	<input type="hidden" id="username" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.username}" />
 	<input type="hidden" id="postId" value="${post.id}" />
 	
-	<div class="container">
+	<div class="container" name="replyContainer">
 		<button class="btn btn-secondary" onclick="history.back()">글목록</button>
 		<button id="btn-share" class="btn btn-secondary" onclick="sharePost(${post.id})">공유하기</button>		
 		<c:choose>
@@ -34,7 +34,7 @@
 	<br>
 	<br>
 	
-	<div class="container">
+	<div class="container" name="replyContainer">
 		<c:choose>
 			<c:when test = "${empty sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}">
 				<div class="card">
@@ -60,6 +60,10 @@
 	<br>
 		<div class="card" id="readReply">
 			<div class="card-header">댓글</div>
+		</div>
+		<div id="replyBtn-more" style="text-align:center;">
+		<br>
+		<button class="btn btn-primary" onClick="more()">더보기</button>
 		</div>
 	</div>
 

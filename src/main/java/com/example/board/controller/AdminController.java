@@ -40,4 +40,5 @@ public class AdminController {
 		model.addAttribute("pageMaker", pageMaker);
         return "admin/user";
     }
+	
 }

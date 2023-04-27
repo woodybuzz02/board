@@ -7,10 +7,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.board.domain.Replys;
 import com.example.board.domain.Users;
 import com.example.board.domain.UsersRepository;
-import com.example.board.dto.ReplyDto;
 import com.example.board.dto.UserDto;
 import com.example.board.handler.ex.CustomApiException;
 import com.example.board.util.paging.Criteria;
@@ -46,15 +44,15 @@ public class UsersService {
 		return usersRepository.findById(userId);
 	}
 	
-	// 댓글 수정
     @Transactional
-    public Users updateRole(int userId, UserDto userDto) {
+    public Users updateRole(UserDto userdto) {
     	
-    	Users user = usersRepository.findById(userId).orElseThrow(() -> {
+    	Users user = usersRepository.findById(userdto.getId()).orElseThrow(() -> {
             throw new CustomApiException("해당 유저는 없는 유저입니다.");
         });
     	
-    	user.setRole(userDto.getRole());
+    	System.out.println(userdto.getRole());
+    	user.setRole(userdto.getRole());
         	 
         return user;
 

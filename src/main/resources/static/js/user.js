@@ -1,56 +1,39 @@
 
-// 모달 보기
-function userInfoModalOpen(userId) {
-	
-	$("#modal-user").css("display", "flex");
-	
-	console.log(userId);
-	
-	$("#userModalList").empty();
+let userRole = $("#userRole").val();
 
-	$.ajax({
-		type: "get",
-		url: `/api/users/${userId}`,
-		dataType: "json"
-	}).done(res => {
-		let user = res.data;
-		console.log(user);
-		let item = `<div class="user__item" id="userModalItem-${user.id}">
-		
-				<form>
-				 <br>
-			      <p>${user.username}의 권한설정</p>
-			      <label><input type="radio" name="role" value="USER"> USER</label> &nbsp &nbsp
-			      <label><input type="radio" name="role" value="ADMIN"> ADMIN</label>
-			      <br>
-			      <br>
-			      <button class="btn btn-primary" onClick="modifyUserRole(${user.id},$("input[name='role']:checked").val())>저장</button>
-			    </form> 	
-				</div>
-	`;
-		$("#userModalList").append(item);
-		
-	}).fail(error => {
-		console.log("계정정보 불러오기 오류", error);
-	});
-}
-
-// 모달 닫기
-function modalClose() {
-	$("#modal-user").css("display", "none");
-	location.reload();
-}
-
-function modifyUserRole(userId, role){
+function modifyUserRole(){
 	
-	let data = {
-		role: role
+	var user_arr = new Array();
+
+	var dataObj={};
+	
+	// for문으로 데이터 생성
+	for (var i = 0 ; i < $("#user_table tbody tr").length; i++){
+	    // 행 별로 첫번째 input 값을 찾아서 newcode로 초기화 
+	    var id = $("#user_table tbody tr").eq(i).children().children().eq(0).val();
+	    var role1 = $("#user_table tbody tr").eq(i).children().children().eq(1).val();
+	    var role2 = $("#user_table tbody tr").eq(i).children().children().eq(2).val();
+	    
+	    // object에 id와 role이라는 key로 값 바인딩
+	    if(role1 != role2){
+		    dataObj.id = id;
+			dataObj.role = role2;
+			
+		// array에 object push
+	    user_arr.push(dataObj);
+	    
+		}
+	
+	    // push 후 초기화 해주지 않으면 같은 object로 loop 만큼 push됨 
+	    dataObj ={};
 	}
+	
+	console.log(user_arr);
 	
 	$.ajax({
 		type: "put",
-		url: `/api/users/${userId}`,
-		data: JSON.stringify(data),
+		url: `/api/users`,
+		data: JSON.stringify(user_arr),
 		contentType: "application/json;charset=utf-8",
 		dataType: "json"
 	}).done(res => {

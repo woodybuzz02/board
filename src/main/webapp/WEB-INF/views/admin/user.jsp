@@ -3,13 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
     
-<%@ include file="../layout/adminHeader.jsp"%>
+<%@ include file="../layout/header.jsp"%>
 
 <div class="container">
 	<h2>계정 관리</h2>
 	<br>
 	<br>    
-	  <table class="table" style="table-layout: fixed">
+	  <table class="table" id="user_table" style="table-layout: fixed">
 	    <thead>
 	      <tr>
 	      	<th width="10%">번호</th>
@@ -17,21 +17,34 @@
 	        <th width="20%">이메일</th>
 	        <th width="15%">권한</th>
 	        <th width="15%">가입일자</th>
-	        <th width="10%">관리</th>
 	      </tr>
 	    </thead>
 	    <tbody>
 	    <c:choose>
 	        <c:when test="${fn:length(list) > 0 }">
 	        	<c:set var="num" value="${pageMaker.postNum }"/>
-	            <c:forEach items="${list }" var="uList">
+	            <c:forEach items="${list }" var="uList" varStatus="status">
 	              <tr>
 	              	<td>${num }</td>
 	                <td>${uList.username}</td>
 	                <td>${uList.email }</td>
-	                <td>${uList.role}</td>
+	                <td>
+	                <input type="hidden" id="userId" value="${uList.id}" />
+	                <input type="hidden" id="userRole" value="${uList.role}" />
+	                <select id="selectRole">
+	                <c:choose>
+	                	<c:when test="${uList.role eq 'USER'}">
+		                	<option name="role" value="USER" selected>USER</option>
+							<option name="role" value="ADMIN">ADMIN</option>
+	                	</c:when>
+	                	<c:otherwise>
+	                		<option name="role" value="USER">USER</option>
+							<option name="role" value="ADMIN" selected>ADMIN</option>
+	                	</c:otherwise>	
+	                </c:choose>
+					</select>
+	                </td>
 	                <td>${uList.created_at}</td>
-	                <td><button type="button" class="btn btn-primary" onclick="userInfoModalOpen(${uList.id})">설정</button></td>
 	              </tr>
 	            <c:set var="num" value="${num-1 }"></c:set>
 	            </c:forEach>
@@ -43,6 +56,10 @@
 	        </c:otherwise>
 	    </c:choose>
 	  </table>
+	  
+	  <button id="btn-modify" class="btn btn-primary" onclick="modifyUserRole()">저장</button>
+	  <br>
+	  <br>
 	
 		<nav aria-label="Page navigation example">
 		  <ul class="pagination">
@@ -67,17 +84,6 @@
 		   </c:if>
 		  </ul>
 		</nav>
-</div>
-
-<!-- 회원 설정 모달 -->
-<div class="modal-user" id="modal-user" style="display: none; justify-content: center;">
-	<div class="user">
-		<div class="user-header">
-			<span>계정 설정</span>&nbsp &nbsp &nbsp &nbsp &nbsp <button onclick="modalClose()">X</button>
-		</div>
-		<div class="user-list" id="userModalList"></div>
-	</div>
-
 </div>
 
 <script src="/js/user.js"></script>

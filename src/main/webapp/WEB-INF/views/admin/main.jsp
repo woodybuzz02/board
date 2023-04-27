@@ -3,9 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
     
-<%@ include file="../layout/adminHeader.jsp"%>
+<%@ include file="../layout/header.jsp"%>
 
-  <p>비속어 관리</p>            
+<div class="container">
+	<h2>비속어 관리</h2>
+	<br>
+	<br>          
   <table class="table" style="table-layout: fixed">
     <thead>
       <tr>
@@ -37,6 +40,6 @@
     </c:choose>
   </table>
 
-
+</div>
 
 <%@ include file="../layout/footer.jsp"%>

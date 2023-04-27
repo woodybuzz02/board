@@ -1,10 +1,14 @@
 package com.example.board.controller;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.board.domain.Users;
@@ -26,11 +30,18 @@ public class UserApiController {
         return new CMRespDto<>(1, "유저정보 가져오기 성공", user);
     }
     
-	@PutMapping("/api/users/{userId}")
-	public CMRespDto<?> modifyUserRole(@PathVariable int userId, UserDto userdto){
+	@PutMapping("/api/users")
+	public CMRespDto<?> modifyUserRole(@RequestBody List<UserDto> userDtos){
 		
-		Users user = usersService.updateRole(userId, userdto);
+		System.out.println(userDtos);
 		
-		return new CMRespDto<>(1, "유저 권한 수정 성공", user);
+		List<Users> users = new ArrayList<>();
+		
+		for(int i=0; i<userDtos.size(); i++) {
+			Users user = usersService.updateRole(userDtos.get(i));
+			users.add(user);
+		}
+		
+		return new CMRespDto<>(1, "유저 권한 수정 성공", users);
 	}
 }
