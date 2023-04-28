@@ -15,7 +15,12 @@ public class Criteria {
 		this.perPageNum = 20;
 	}
 	
-	public void setPerPageNum1(int perPageNum) {
+	public void setCriteria(int page, int perPageNum) {
+		this.page = page;
+		this.perPageNum = perPageNum;
+	}
+	
+	public void setPerPageNum(int perPageNum) {
 		this.perPageNum = perPageNum;
 	}
 	
@@ -33,15 +38,6 @@ public class Criteria {
 	
 	public int getPerPageNum() {
 		return perPageNum;
-	}
-	
-	public void setPerPageNum(int pageCount) { // 페이지당 보여줄 게시글 수가 변하지 않게 설정
-		int cnt = this.perPageNum;
-		if(pageCount != cnt) {
-			this.perPageNum = cnt;
-		}else {
-			this.perPageNum = pageCount;
-		}
 	}
 	
 }

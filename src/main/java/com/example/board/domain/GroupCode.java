@@ -1,9 +1,11 @@
-package com.example.board.util;
+package com.example.board.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.example.board.util.BaseEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +19,6 @@ public class GroupCode extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	private String gc_nm;
+	private String gcNm;
 
 }

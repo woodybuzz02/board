@@ -2,10 +2,7 @@ package com.example.board.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,28 +61,6 @@ public class PostsService {
 		post.setContent(modifyPostDto.getContent());
 		
 		return post;
-	}
-	
-	/** 
-	검사를 하다가 욕이 나오면 사용자한테 메일 보내고 게시글 블라인드 처리를 하는 거..
-	 **/
-	
-	@Scheduled(cron = "0 0/10 * * * *") // 10분마다!
-	@Transactional
-	public void filterAllPost(){
-		List<Posts> posts = postsRepository.findAll();
-		
-		posts.forEach((post) -> {
-			
-			Pattern p = Pattern.compile("시발", Pattern.CASE_INSENSITIVE); // 대소문자 구분하지 않음.
-	        Matcher m = p.matcher(post.getContent());
-
-	        System.out.println("되냐..?");
-	        System.out.println(m.matches()); // 대상 문자열과 패턴이 일치할 경우 true 반환!
-	        
-	        
-		
-		});
 	}
 	
 

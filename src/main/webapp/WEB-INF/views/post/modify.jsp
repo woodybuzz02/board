@@ -13,7 +13,7 @@
 				<label for="content">Content:</label>
 				<textarea class="form-control" rows="5" placeholder="Enter content" name="content" id="content">${post.content}</textarea>	
 			</div>
-			<button id="btn-modify" class="btn btn-primary" onclick="modify(${post.id})">수정</button>
+			<button id="btn-modify" class="btn btn-primary" onclick="modify(${post.id})" style="float: right; position: relative; left: -50%;">수정</button>
 		</form>
 	</div>	
 

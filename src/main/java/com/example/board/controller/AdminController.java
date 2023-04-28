@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.board.domain.SwiftCode;
+import com.example.board.service.SlangFilteringService;
 import com.example.board.service.UsersService;
 import com.example.board.util.paging.Criteria;
 import com.example.board.util.paging.PageMaker;
@@ -18,10 +20,27 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 	
 	private final UsersService usersService;
+	private final SlangFilteringService slangFilteringService;
 	
-	@GetMapping("admin/main")
-	public String adminForm() {
-        return "admin/main";
+	@GetMapping("admin/slang")
+	public String adminSlangManagementForm(Model model, Criteria cri) {
+		
+		cri.setPerPageNum(10);
+		
+		List<SwiftCode> slangList = slangFilteringService.findAllSlang(cri);
+		
+		int total = slangFilteringService.countAllSlang();
+		
+		PageMaker pageMaker = new PageMaker();
+		
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(total);
+		pageMaker.setPostNum(cri, total);
+		
+		model.addAttribute("list", slangList);
+		model.addAttribute("pageMaker", pageMaker);
+		
+        return "admin/slang";
     }
 	
 	@GetMapping("admin/user")

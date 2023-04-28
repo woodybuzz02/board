@@ -1,4 +1,4 @@
-package com.example.board.util;
+package com.example.board.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.example.board.util.BaseEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,9 +22,10 @@ public class SwiftCode extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	private String sc_nm;
+	private String scNm;
 	
 	@JoinColumn(name = "gc_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private GroupCode gc;
+    
 }

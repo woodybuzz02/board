@@ -13,7 +13,7 @@
 				<label for="content">Content:</label>
 				<textarea class="form-control" rows="5" placeholder="Enter content" name="content" id="content"></textarea>	
 			</div>
-			<button id="btn-save" class="btn btn-primary">등록</button>
+			<button id="btn-save" class="btn btn-primary" style="float: right; position: relative; left: -50%;">등록</button>
 		</form>
 	</div>	
 

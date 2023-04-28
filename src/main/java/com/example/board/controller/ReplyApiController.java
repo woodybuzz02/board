@@ -24,7 +24,6 @@ import com.example.board.domain.Replys;
 import com.example.board.dto.CMRespDto;
 import com.example.board.dto.ReplyDto;
 import com.example.board.service.ReplysService;
-import com.example.board.util.paging.Criteria;
 
 import lombok.RequiredArgsConstructor;
 

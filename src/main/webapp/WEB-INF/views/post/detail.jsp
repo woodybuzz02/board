@@ -8,6 +8,7 @@
 	<input type="hidden" id="postId" value="${post.id}" />
 	
 	<div class="container" name="replyContainer">
+		<div style="float: right;">
 		<button class="btn btn-secondary" onclick="history.back()">글목록</button>
 		<button id="btn-share" class="btn btn-secondary" onclick="sharePost(${post.id})">공유하기</button>		
 		<c:choose>
@@ -18,7 +19,7 @@
 			<button id="btn-delete" class="btn btn-secondary" onclick="deletePost(${post.id})">삭제</button>
 			</c:otherwise>
 		</c:choose>
-		
+		</div>
 		<br><br>
 		<div>
 			<h3>${post.title}</h3>
@@ -52,7 +53,7 @@
 						<textarea class="form-control" id="replyContent" rows="4" cols="70"></textarea>
 					</div>
 					<div class="card-footer">
-						<button class="btn btn-primary" onClick="addReply(${post.id},0,0)">등록</button>
+						<button class="btn btn-primary" onClick="addReply(${post.id},0,0)" style="float: right;">등록</button>
 					</div>
 				</div>
 			</c:otherwise>

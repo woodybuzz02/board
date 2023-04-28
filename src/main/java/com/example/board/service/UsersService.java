@@ -51,7 +51,6 @@ public class UsersService {
             throw new CustomApiException("해당 유저는 없는 유저입니다.");
         });
     	
-    	System.out.println(userdto.getRole());
     	user.setRole(userdto.getRole());
         	 
         return user;

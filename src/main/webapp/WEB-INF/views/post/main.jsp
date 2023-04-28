@@ -39,7 +39,7 @@
     </c:choose>
   </table>
 
-	 <nav aria-label="Page navigation example">
+	 <nav aria-label="Page navigation example" style="float: right; position: relative; left: -50%;">
 	  <ul class="pagination">
 	  <c:if test="${pageMaker.prev }">
 	    <li class="page-item">

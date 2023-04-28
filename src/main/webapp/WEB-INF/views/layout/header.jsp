@@ -40,7 +40,7 @@
 						<li class="nav-item"><a class="nav-link" href="/post/upload">글쓰기</a></li>
 						<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
 						<c:if test = "${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.user.role eq 'ADMIN'}">
-							<li class="nav-item"><a class="nav-link" href="/admin/main">비속어관리</a></li>
+							<li class="nav-item"><a class="nav-link" href="/admin/slang">비속어 관리</a></li>
 							<li class="nav-item"><a class="nav-link" href="/admin/user">계정 관리</a></li>
 						</c:if>
 					</ul>

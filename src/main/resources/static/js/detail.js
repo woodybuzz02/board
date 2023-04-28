@@ -23,8 +23,10 @@ function findAllReply() {
 		
 		res.data.content.forEach((reply) => {
 			
-			let items1 = `<div id="postReplyInput-${reply.id}">
-				</div>
+			let items1 = `
+				<table class="table" id="postReplyInput-${reply.id}" style="table-layout: fixed">
+				</table>
+				
 				`
 			
 			$("#readReply").append(items1);
@@ -38,7 +40,7 @@ function findAllReply() {
 			items2 += `&nbsp ${reply.user.username}<br>
 								<font size="2" color="lightgray">${reply.createdAt}</font>
 							</div>
-						<td>`;
+						</td>`;
 			
 			items2 += 	`<!-- 본문내용 -->
 						<td width="800">
@@ -63,7 +65,8 @@ function findAllReply() {
 										<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
 										</div>
 									</td>
-								</tr>	
+								</tr>
+								
 								`
 								;
 						}
@@ -102,10 +105,10 @@ function findChildReply(parentReplyId) {
 						<!-- 아이디, 작성날짜 -->
 						<td width="150">
 							<div>`;
-			items1 += `&nbsp >> ${reply.user.username}<br>
+			items1 += `&nbsp <img src="https://www.zigger.net/theme/zigger-default/mod-board/images/reply-ico.png" alt="My Image"  width="20" height="20"> ${reply.user.username}<br>
 							<font size="2" color="lightgray">${reply.createdAt}</font>
 						</div>
-					<td>`;
+					</td>`;
 			
 			items1 += 	`<!-- 본문내용 -->
 						<td width="800">
@@ -237,12 +240,15 @@ function replyOpen(replyId, replyGroup){
 		return false;
 	}	
 	else{
+		
+		$(`#childReplyInput-${replyId}`).remove();
+		
 		let items2 = `
-			<tr>
+			<tr id="childReplyInput-${replyId}">
 				<td width="150">
 				</td>
 				<td width="800">
-					<textarea class="form-control" id="replyContent2"></textarea>
+					<textarea class="form-control" id="replyContent2" cols="70" ></textarea>
 				</td>
 				<td width="100">
 					<div id="replyBtn" style="text-align:center;">
@@ -267,9 +273,7 @@ function replyModifyOpen(replyId, content){
 			<textarea class="form-control" rows="4" cols="70" id=modifyContent>${content}</textarea>
 		`
 		let items2 = `
-			&nbsp;&nbsp;&nbsp;&nbsp;
 			<button class="btn btn-primary" onClick="modifyReply(${replyId})">수정</button>
-			&nbsp;&nbsp;&nbsp;&nbsp;
 			<button class="btn btn-primary" onClick="document.location.reload()">취소</button>
 		`
 		$(`#replyContent-${replyId}`).append(items);
