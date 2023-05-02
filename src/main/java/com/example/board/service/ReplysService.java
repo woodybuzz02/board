@@ -52,7 +52,6 @@ public class ReplysService {
         	reply.setParentReplyId(replyDto.getParentReplyId());
         	Integer replyOrder = replysRepository.findReplyOrder(replyDto.getReplyGroup(), replyDto.getPostId()).orElse(0);
         	reply.changeOrder(replyOrder);
-        	System.out.println(reply.getReplyOrder()); 
         }
         
         return replysRepository.save(reply);
@@ -117,8 +116,6 @@ public class ReplysService {
             });
     		
     		countChild = replysRepository.countChildList(parentReply.getId()).orElse(0);
-    		
-    		System.out.println(parentReply.getContent());
     		
     		// 부모댓글이 없을 경우(=content의 내용이 "삭제된 댓글입니다."인 경우)
     		if(parentReply.getContent().equals("삭제된 댓글입니다.")) { 

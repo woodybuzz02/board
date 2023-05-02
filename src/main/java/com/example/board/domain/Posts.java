@@ -40,7 +40,7 @@ public class Posts extends BaseEntity{
 	@Column(nullable = false)
 	private String content;
 	
-	private int slangCode;
+	private int status;
 	
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER)

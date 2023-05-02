@@ -44,12 +44,23 @@ function findAllReply() {
 			
 			items2 += 	`<!-- 본문내용 -->
 						<td width="800">
-							<div class="text_wrapper" id="replyContent-${reply.id}" onclick="findChildReply(${reply.id})">
-								${reply.content}
+							<div class="text_wrapper" id="replyContent-${reply.id}" onclick="findChildReply(${reply.id})">`;
+			if (reply.status == 1){
+				
+				items2 += `댓글이 블라인드 처리 되었습니다.
 							</div>
 						</td>
 						<!-- 버튼 -->
 						<td width="100">`;
+				
+			}else{
+				items2 += `${reply.content}
+							</div>
+						</td>
+						<!-- 버튼 -->
+						<td width="100">`;
+			}
+								
 			if (principalId == "" || principalId == null || reply.content === "삭제된 댓글입니다.") {
 				items2 += `
 					</td>
@@ -112,12 +123,23 @@ function findChildReply(parentReplyId) {
 			
 			items1 += 	`<!-- 본문내용 -->
 						<td width="800">
-							<div class="text_wrapper" id="replyContent-${reply.id}" >
-								${reply.content}
+							<div class="text_wrapper" id="replyContent-${reply.id}" >`;
+			if(reply.status == 1){
+				
+				items1 += `댓글이 블라인드 처리 되었습니다.
 							</div>
 						</td>
 						<!-- 버튼 -->
 						<td width="100">`;
+				
+			}else{
+				items1 += `${reply.content}
+							</div>
+						</td>
+						<!-- 버튼 -->
+						<td width="100">`;
+			}
+								
 			if (principalId == "" || principalId == null || reply.content === "삭제된 댓글입니다.") {
 				items1 += `</td>
 					</tr>	

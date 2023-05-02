@@ -54,7 +54,6 @@ public class PostController {
     @PostMapping("/post")
     public String postUpload(@Valid UploadPostDto uploadPostDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     	Posts post = uploadPostDto.toEntity(principalDetails.getUser());
-    	System.out.println(post);
         postsService.uploadPost(post);
         return "redirect:/post/main";
     }

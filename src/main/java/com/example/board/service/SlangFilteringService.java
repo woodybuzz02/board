@@ -2,10 +2,13 @@ package com.example.board.service;
 
 import java.util.List;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.board.domain.Posts;
+import com.example.board.domain.PostsRepository;
+import com.example.board.domain.Replys;
+import com.example.board.domain.ReplysRepository;
 import com.example.board.domain.SwiftCode;
 import com.example.board.domain.SwiftCodeRepository;
 import com.example.board.dto.SwiftCodeDto;
@@ -18,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class SlangFilteringService {
 	
 	private final SwiftCodeRepository swiftCodeRepository;
+	private final PostsRepository postsRepository;
+	private final ReplysRepository replysRepository;
 	
 	// 욕추가	
 	@Transactional
@@ -47,14 +52,26 @@ public class SlangFilteringService {
 		swiftCodeRepository.deleteById(swiftCodeDto.getId());
 	}
 	
-	/** 
-	검사를 하다가 욕이 나오면 사용자한테 메일 보내고 게시글 블라인드 처리를 하는 거..
-	 **/
+	// 게시글(제목+내용) 필터링 처리 
+	@Transactional
+	public List<Posts> filteringAllPost(){
+		
+		List<Posts> SlangPostList = postsRepository.findSlangPosts();
+		postsRepository.filteringAllPost();
+		
+		return SlangPostList;
+			
+	}
 	
-//	@Scheduled(cron = "0 0/10 * * * *") // 10분마다!
-//	@Transactional
-//	public void filterAllPost(){
-//		
-//	}
+	// 댓글 필터링 처리 
+	@Transactional
+	public List<Replys> filteringAllReply(){
+		
+		List<Replys> SlangReplyList = replysRepository.findSlangReplys();
+		replysRepository.filteringAllReply();
+		
+		return SlangReplyList;
+			
+	}
 	
 }

@@ -24,7 +24,14 @@
             <c:forEach items="${list }" var="pList">
                 <tr>
                 <td>${num }</td>
-                <td onClick="location.href='/post/${pList.id}'">${pList.title }</td>
+                <c:choose>
+        			<c:when test="${pList.status == 1}">
+        			<td onClick="location.href='/post/${pList.id}'">블라인드 처리된 글입니다.</td>
+        			</c:when>
+	        		<c:otherwise>
+	        		<td onClick="location.href='/post/${pList.id}'">${pList.title }</td>
+	        		</c:otherwise>
+        		</c:choose>
                 <td>${pList.writer}</td>
                 <td>${pList.created_at }</td>
               </tr>

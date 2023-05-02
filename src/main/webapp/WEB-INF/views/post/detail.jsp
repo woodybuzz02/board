@@ -21,13 +21,28 @@
 		</c:choose>
 		</div>
 		<br><br>
-		<div>
-			<h3>${post.title}</h3>
-		</div>
-		<hr />
-		<div>
-			<div>${post.content}</div>
-		</div>
+		
+		<c:choose>
+    		<c:when test="${post.status == 1}">
+    		<div>
+				<h3>블라인드 처리된 글입니다.</h3>
+			</div>
+			<hr />
+			<div>
+				<P>게시글이 비속어 사용으로 인해 블라인드 처리되었습니다.</P>
+				<P>많은 회원님들께 불편함을 주는 내용의 글이나 각 게시판 성격에 맞지 않는 글은 등록시 주의해 주시기 바랍니다.</P>
+			</div>
+    		</c:when>
+      		<c:otherwise>
+      			<div>
+					<h3>${post.title}</h3>
+				</div>
+				<hr />
+				<div>
+					<div>${post.content}</div>
+				</div>
+      		</c:otherwise>
+        </c:choose>
 	</div>
 	<br>
 	<br>

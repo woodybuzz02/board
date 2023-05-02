@@ -38,6 +38,8 @@ public class Replys extends BaseEntity{ // 댓글 글번호, 게시글 글번호
 	
 	private int replyOrder; // 댓글 순서
 	
+	private int status;
+	
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Users user;

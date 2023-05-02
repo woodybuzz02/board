@@ -30,4 +30,17 @@ public interface ReplysRepository extends JpaRepository<Replys, Integer>{
 	@Modifying
 	@Query(value = "DELETE FROM replys r WHERE id = :id", nativeQuery = true)
 	void deleteById(@Param("id") int id);
+	
+	@Modifying
+	@Query(value = "update replys r \r\n"
+			+ "set status=(select gc.id from group_code gc where gc.gc_nm = '비속어') \r\n"
+			+ "where status=0 and\r\n"
+			+ "r.content similar to (select string_agg('%'||sc_nm||'%', '|') from swift_code sc where sc.gc_id = (select gc.id from group_code gc where gc.gc_nm = '비속어'));", nativeQuery = true)
+	void filteringAllReply();
+	
+	@Query(value = "select * from replys r \r\n"
+			+ "where status=0 and\r\n"
+			+ "r.content similar to (select string_agg('%'||sc_nm||'%', '|') from swift_code sc where sc.gc_id = (select gc.id from group_code gc where gc.gc_nm = '비속어'));", nativeQuery = true)
+	List<Replys> findSlangReplys();
+	
 }
