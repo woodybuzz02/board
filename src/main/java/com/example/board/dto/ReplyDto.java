@@ -17,5 +17,7 @@ public class ReplyDto {
     private int replyGroup;
     
     private int depth;
+    
+    private int status;
 
 }

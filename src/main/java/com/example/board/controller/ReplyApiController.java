@@ -63,7 +63,6 @@ public class ReplyApiController {
 	// 댓글 수정
 	@PutMapping("/api/reply/{replyId}")
     public ResponseEntity<?> updateReply(@PathVariable("replyId") int replyId, @Valid @RequestBody ReplyDto replyDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principal) {
-
 		Replys reply = replysService.updateReplys(replyId, replyDto, principal.getUser().getId());
 		
         return new ResponseEntity<>(new CMRespDto<>(1, "댓글 수정 성공!", reply), HttpStatus.OK);

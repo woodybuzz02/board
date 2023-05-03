@@ -2,6 +2,7 @@
 let postId = $("#postId").val();
 let principalId = $("#principalId").val();
 let username = $("#username").val();
+let principalRole = $("#principalRole").val();
 
 // 페이지 초기화
 let page = 0;
@@ -24,7 +25,7 @@ function findAllReply() {
 		res.data.content.forEach((reply) => {
 			
 			let items1 = `
-				<table class="table" id="postReplyInput-${reply.id}" style="table-layout: fixed">
+				<table class="table" id="postReplyInput-${reply.id}" style="table-layout: fixed;">
 				</table>
 				
 				`
@@ -45,44 +46,167 @@ function findAllReply() {
 			items2 += 	`<!-- 본문내용 -->
 						<td width="800">
 							<div class="text_wrapper" id="replyContent-${reply.id}" onclick="findChildReply(${reply.id})">`;
-			if (reply.status == 1){
+			
+			// 댓글의 상태가 블라인드 처리가 되었을 때				
+			if (reply.status == 15){
 				
-				items2 += `댓글이 블라인드 처리 되었습니다.
-							</div>
+				// 블라인드 상태 + 대댓글 유 + 부모댓글 무 -> 수정과 삭제는 필요없고 답변버튼만 있으면 될 듯! 이때 로그인을 하지않았을 떄 버튼 안나오게!
+				if(reply.content === "삭제된 댓글입니다."){
+					
+					items2 += `${reply.content}</div>
 						</td>
 						<!-- 버튼 -->
-						<td width="100">`;
-				
-			}else{
-				items2 += `${reply.content}
-							</div>
-						</td>
-						<!-- 버튼 -->
-						<td width="100">`;
-			}
-								
-			if (principalId == "" || principalId == null || reply.content === "삭제된 댓글입니다.") {
-				items2 += `
-					</td>
-					</tr>	
-			`;
-			} else {
-				items2 += `<div id="replyBtn-${reply.id}" style="text-align:center;">
+					<td width="100">`;
+					
+						
+					if (principalId == "" || principalId == null){ // 로그인 안함
+					
+					items2 += `</td>
+					`;
+						
+					}else{ // 로그인 함
+					items2 += `
+						<div id="replyBtn-${reply.id}" style="text-align:center;">
 							<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
-						<!-- 댓글 작성자만 수정, 삭제 가능하도록 -->`;
-						if (reply.user.id == principalId){
+						</div>
+					</td>
+					`;
+						
+					}
+						
+						
+				// 블라인드 상태 + 대댓글 유 + 부모댓글 유 -> 답변), 수정, 삭제, 예외(관리자만!)
+				}else{
+					items2 += `댓글이 블라인드 처리 되었습니다.`;
+					
+					// 관리자일 때 댓글 내용, 답변, 수정, 삭제, 예외 다 필요!
+					if(principalRole == 'ADMIN'){ // 로그인함
+						
+						items2 += `<br>
+							<br>
+							<hr />
+							댓글 내용 : ${reply.content}
+								</div>
+							</td>
+							<!-- 버튼 -->
+							<td width="100">
+								<div id="replyBtn-${reply.id}" style="text-align:center;">
+									<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
+									<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
+									<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
+									<a href="#" onClick="modifyStatus(${reply.id}, '${reply.content}')">[예외]</a><br>
+                				</div>
+								</td>
+							</tr>
+							
+							`;
+							
+						 }else if(principalRole == 'USER' && principalId == `${reply.user.id}`){ // 관리자 아니고 댓글을 작성한 본인일 경우 답변, 수정, 삭제 필요! //로그인함
+							
 							items2 += `
+								</td>
+								<!-- 버튼 -->
+								<td width="100">
+									<div id="replyBtn-${reply.id}" style="text-align:center;">
+										<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
 										<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
 										<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
-										</div>
+	                				</div>
 									</td>
 								</tr>
 								
-								`
-								;
+								`;
+							
+						}else if(principalRole == 'USER' && principalId != `${reply.user.id}`){ // 관리자 아니고 댓글 작성한 본인도 아닐 경우! -> 대댓글은 작성 가능! // 로그인함
+							
+							items2 += `
+								</td>
+								<!-- 버튼 -->
+								<td width="100">
+									<div id="replyBtn-${reply.id}" style="text-align:center;">
+										<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
+	                				</div>
+								</td>
+								</tr>
+								
+								`;
+							
+						}else { // 로그인 안했을 경우
+							
+							items2 += `
+								</td>
+								<!-- 버튼 -->
+								<td width="100">
+								</td>
+								</tr>
+								
+								`;
+							
+							
 						}
-			}
+				}
+			
+			// 댓글상태가 블라인드가 아닐 때		
+			}else{
+				
+				items2 += `${reply.content}</div>
+						</td>
+						<!-- 버튼 -->
+					<td width="100">`;
+				if(principalRole == 'ADMIN'){
+					
+					items2 += `<div id="replyBtn-${reply.id}" style="text-align:center;">
+									<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
+									<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
+									<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>`
+					if(`${reply.status}`== 16){
+						items2 += `상태 : 예외
+									</div>
+								</td>
+							</tr>`;
+					}else{
+						items2 += `</div>
+								</td>
+							</tr>`;
+					}			
 
+				}else if(principalRole == 'USER' && principalId == `${reply.user.id}`){
+							
+							items2 += `
+									<div id="replyBtn-${reply.id}" style="text-align:center;">
+										<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
+										<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
+										<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
+	                				</div>
+									</td>
+								</tr>
+								
+								`;
+							
+						}else if(principalRole == 'USER' && principalId != `${reply.user.id}`){
+							
+							items2 += `
+									<div id="replyBtn-${reply.id}" style="text-align:center;">
+										<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
+	                				</div>
+								</td>
+								</tr>
+								
+								`;
+							
+						}else {
+							
+							items2 += `
+								</td>
+								</tr>
+								
+								`;
+							
+							
+						}
+				
+			}
+								
 			$(`#postReplyInput-${reply.id}`).append(items2);
 			
 		}
@@ -124,38 +248,118 @@ function findChildReply(parentReplyId) {
 			items1 += 	`<!-- 본문내용 -->
 						<td width="800">
 							<div class="text_wrapper" id="replyContent-${reply.id}" >`;
-			if(reply.status == 1){
+							
+			if(reply.status == 15){ // 대댓글 + 블라인드 상태
 				
-				items1 += `댓글이 블라인드 처리 되었습니다.
-							</div>
+				items1 += `댓글이 블라인드 처리 되었습니다.`
+				
+				if(principalRole == 'ADMIN'){ // 대댓글 + 블라인드 + 관리자
+					
+					items1 += `<br>
+						<br>
+						<hr />
+						댓글 내용 : ${reply.content}
+						<br>
+						<br>
+						</div>
 						</td>
 						<!-- 버튼 -->
 						<td width="100">`;
+						
+					items1 += `<div id="replyBtn-${reply.id}" style="text-align:center;">`;
+					
+					items1 += `
+									<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
+									<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
+									<a href="#" onclick="modifyStatus(${reply.id}, '${reply.content}')">[예외]</a><br>
+									</div>
+								</td>
+							</tr>	`;
 				
-			}else{
-				items1 += `${reply.content}
-							</div>
-						</td>
-						<!-- 버튼 -->
-						<td width="100">`;
-			}
+				
+				} else { // 대댓글 + 블라인드 + 관리자가 아닌 경우
+					items1 += `
+						</div>
+					</td>
+					<!-- 버튼 -->
+					<td width="100">
+					<div id="replyBtn-${reply.id}" style="text-align:center;">
+							<!-- 댓글 작성자만 수정, 삭제 가능하도록 -->`;
+							if (reply.user.id == principalId){ // 대댓글 + 블라인드 + 관리자가 아닌 경우(작성자인 경우)
+								items1 += `
+											<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
+											<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
+											</div>
+										</td>
+									</tr>	`;
+							}else{// 대댓글 + 블라인드 + 관리자가 아닌 경우(작성자가 아닌 경우)
+								items1 += `
+											</div>
+										</td>
+									</tr>	`;
 								
-			if (principalId == "" || principalId == null || reply.content === "삭제된 댓글입니다.") {
-				items1 += `</td>
-					</tr>	
-			`;
-			} else {
-				items1 += `<div id="replyBtn-${reply.id}" style="text-align:center;">
+							}
+				}
+				
+			}else{ // 대댓글 + 블라인드가 아닌 경우
+			
+			
+				if(principalRole == 'ADMIN'){ // 관리자 + 대댓글 + 블라인드가 아닌 경우
+					
+					items1 += `${reply.content}
+							</div>
+						</td>
+						<!-- 버튼 -->
+						<td width="100">`;
+						
+					items1 += `<div id="replyBtn-${reply.id}" style="text-align:center;">`;
+					
+					items1 += `
+									<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
+									<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>`
+					if(`${reply.status}`== 16){
+						items1 += `상태 : 예외
+									</div>
+								</td>
+							</tr>`;
+					}else{
+						items1 += `</div>
+								</td>
+							</tr>`;
+					}			
+					
+				}
+				else{ // 대댓글 + 블라인드, 관리자가 아닌 경우
+				
+				
+					items1 += `${reply.content}
+							</div>
+						</td>
+						<!-- 버튼 -->
+						<td width="100">
+						<div id="replyBtn-${reply.id}" style="text-align:center;">
 						<!-- 댓글 작성자만 수정, 삭제 가능하도록 -->`;
-						if (reply.user.id == principalId){
+							
+						if (reply.user.id == principalId){ // 대댓글 + 블라인드, 관리자가 아닌 경우(작성자인 경우)
 							items1 += `
 										<a href="#" onclick="replyModifyOpen(${reply.id},'${reply.content}')">[수정]</a><br>
 										<a href="#" onclick="deleteReply(${reply.id})">[삭제]</a><br>
 										</div>
 									</td>
 								</tr>	`;
+						}else{// 대댓글 + 블라인드 + 관리자가 아닌 경우(작성자가 아닌 경우)
+							items1 += `
+										</div>
+									</td>
+								</tr>	`;
+							
 						}
+					
+				}
+								
 			}
+								
+
 
 			$(`#postReplyInput-${parentReplyId}`).append(items1);
 			
@@ -349,3 +553,33 @@ function deleteReply(replyId){
 	});
 	
 }
+
+// 상태 수정
+function modifyStatus(replyId, content) {
+	
+	let data;
+	
+		data = {
+			content: content,
+			status: 16
+		}
+	
+	console.log(data);
+	
+	$.ajax({
+		type: "put",
+		url: `/api/reply/${replyId}`,
+		data: JSON.stringify(data),
+		contentType: "application/json;charset=utf-8",
+		dataType: "json"
+	}).done(res => {
+		console.log("성공", res);
+		$('#modifyContent').val("");
+		document.location.reload(); // 새로고침
+	}).fail(error => {
+		console.log("오류", error);
+	});
+	
+}
+
+

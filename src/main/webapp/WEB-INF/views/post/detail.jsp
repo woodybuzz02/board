@@ -4,6 +4,7 @@
 <%@ include file="../layout/header.jsp"%>
 
 	<input type="hidden" id="principalId" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.user.id}" />
+	<input type="hidden" id="principalRole" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.user.role}" />
 	<input type="hidden" id="username" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.username}" />
 	<input type="hidden" id="postId" value="${post.id}" />
 	
@@ -12,7 +13,7 @@
 		<button class="btn btn-secondary" onclick="history.back()">글목록</button>
 		<button id="btn-share" class="btn btn-secondary" onclick="sharePost(${post.id})">공유하기</button>		
 		<c:choose>
-			<c:when test = "${empty sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}">
+			<c:when test = "${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.user.id ne post.user.id}">
 			</c:when>
 			<c:otherwise>
 			<button id="btn-update" class="btn btn-secondary" onClick="location.href='${post.id}/modify'">수정</button>
@@ -23,7 +24,7 @@
 		<br><br>
 		
 		<c:choose>
-    		<c:when test="${post.status == 1}">
+    		<c:when test="${post.status == 15}">
     		<div>
 				<h3>블라인드 처리된 글입니다.</h3>
 			</div>
@@ -32,7 +33,19 @@
 				<P>게시글이 비속어 사용으로 인해 블라인드 처리되었습니다.</P>
 				<P>많은 회원님들께 불편함을 주는 내용의 글이나 각 게시판 성격에 맞지 않는 글은 등록시 주의해 주시기 바랍니다.</P>
 			</div>
+			<c:if test = "${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.user.role eq 'ADMIN'}">
+				<br><br><br><br>
+				<hr />
+					<div>
+						<h3>게시글 제목 : ${post.title}</h3>
+					</div>
+					<hr />
+					<div>
+						<div>게시글 내용 : ${post.content}</div>
+					</div>
+			</c:if>
     		</c:when>
+    		
       		<c:otherwise>
       			<div>
 					<h3>${post.title}</h3>

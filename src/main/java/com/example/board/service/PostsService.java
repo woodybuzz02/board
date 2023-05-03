@@ -59,6 +59,7 @@ public class PostsService {
 		
 		post.setTitle(modifyPostDto.getTitle());
 		post.setContent(modifyPostDto.getContent());
+		post.setStatus(modifyPostDto.getStatus());
 		
 		return post;
 	}

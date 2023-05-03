@@ -84,6 +84,7 @@ public class ReplysService {
         });
     	
         reply.setContent(replyDto.getContent());
+        reply.setStatus(replyDto.getStatus());
         	 
         return reply;
 

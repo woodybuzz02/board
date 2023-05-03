@@ -33,7 +33,7 @@ public interface ReplysRepository extends JpaRepository<Replys, Integer>{
 	
 	@Modifying
 	@Query(value = "update replys r \r\n"
-			+ "set status=(select gc.id from group_code gc where gc.gc_nm = '비속어') \r\n"
+			+ "set status=(select id from swift_code sc where sc.gc_id = (select gc.id from group_code gc where gc.gc_nm = '게시글상태') and sc_nm = '블라인드(비속어)') \r\n"
 			+ "where status=0 and\r\n"
 			+ "r.content similar to (select string_agg('%'||sc_nm||'%', '|') from swift_code sc where sc.gc_id = (select gc.id from group_code gc where gc.gc_nm = '비속어'));", nativeQuery = true)
 	void filteringAllReply();
