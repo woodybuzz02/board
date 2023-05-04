@@ -583,3 +583,9 @@ function modifyStatus(replyId, content) {
 }
 
 
+function more(){
+	page++;
+	findAllReply();
+}
+
+
