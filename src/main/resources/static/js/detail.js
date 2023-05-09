@@ -50,33 +50,6 @@ function findAllReply() {
 			// 댓글의 상태가 블라인드 처리가 되었을 때				
 			if (reply.status == 15){
 				
-				// 블라인드 상태 + 대댓글 유 + 부모댓글 무 -> 수정과 삭제는 필요없고 답변버튼만 있으면 될 듯! 이때 로그인을 하지않았을 떄 버튼 안나오게!
-				if(reply.content === "삭제된 댓글입니다."){
-					
-					items2 += `${reply.content}</div>
-						</td>
-						<!-- 버튼 -->
-					<td width="100">`;
-					
-						
-					if (principalId == "" || principalId == null){ // 로그인 안함
-					
-					items2 += `</td>
-					`;
-						
-					}else{ // 로그인 함
-					items2 += `
-						<div id="replyBtn-${reply.id}" style="text-align:center;">
-							<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
-						</div>
-					</td>
-					`;
-						
-					}
-						
-						
-				// 블라인드 상태 + 대댓글 유 + 부모댓글 유 -> 답변), 수정, 삭제, 예외(관리자만!)
-				}else{
 					items2 += `댓글이 블라인드 처리 되었습니다.`;
 					
 					// 관리자일 때 댓글 내용, 답변, 수정, 삭제, 예외 다 필요!
@@ -144,10 +117,33 @@ function findAllReply() {
 							
 							
 						}
-				}
 			
 			// 댓글상태가 블라인드가 아닐 때		
+			}else if(reply.status == 17){
+				
+				items2 += `삭제된 댓글입니다.</div>
+						</td>
+						<!-- 버튼 -->
+					<td width="100">`;
+					
+						
+					if (principalId == "" || principalId == null){ // 로그인 안함
+					
+					items2 += `</td>
+					`;
+						
+					}else{ // 로그인 함
+					items2 += `
+						<div id="replyBtn-${reply.id}" style="text-align:center;">
+							<a href="#" onclick="replyOpen(${reply.id}, ${reply.replyGroup})" >[답변]</a><br>
+						</div>
+					</td>
+					`;
+						
+					}
+				
 			}else{
+				
 				
 				items2 += `${reply.content}</div>
 						</td>

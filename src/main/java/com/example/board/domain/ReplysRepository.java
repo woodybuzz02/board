@@ -43,4 +43,5 @@ public interface ReplysRepository extends JpaRepository<Replys, Integer>{
 			+ "r.content similar to (select string_agg('%'||sc_nm||'%', '|') from swift_code sc where sc.gc_id = (select gc.id from group_code gc where gc.gc_nm = '비속어'));", nativeQuery = true)
 	List<Replys> findSlangReplys();
 	
+	
 }

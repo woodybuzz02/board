@@ -94,21 +94,23 @@ public class ReplysService {
     @Transactional
     public void deleteReplys(int replyId, int userId) {
     	
+    	
     	Replys reply = replysRepository.findById(replyId).orElseThrow(() -> {
             throw new CustomApiException("해당 댓글은 없는 댓글입니다.");
         });
     	
-    	Integer countChild = replysRepository.countChildList(reply.getId()).orElse(0);
-    	
     	// 부모댓글인 경우
     	if(reply.getParentReplyId() == 0) {
+    		
+    		Integer countChild = replysRepository.countChildList(reply.getId()).orElse(0);
 		
     		// 자식댓글이 있을 경우
     		if(countChild != 0) {
-    			reply.setContent("삭제된 댓글입니다.");
+    			reply.setStatus(17);
     		}else{// 자식댓글이 없을 경우	
     			replysRepository.deleteById(reply.getId());
-    		}	
+    		}
+    		
     		
     	}else { // 자식댓글인 경우
     		
@@ -116,21 +118,19 @@ public class ReplysService {
                 throw new CustomApiException("해당 댓글은 없는 댓글입니다.");
             });
     		
-    		countChild = replysRepository.countChildList(parentReply.getId()).orElse(0);
+    		Integer countChild = replysRepository.countChildList(parentReply.getId()).orElse(0);
     		
-    		// 부모댓글이 없을 경우(=content의 내용이 "삭제된 댓글입니다."인 경우)
-    		if(parentReply.getContent().equals("삭제된 댓글입니다.")) { 
-    			System.out.println("countChild: "+countChild);
-    			System.out.println("parentReplyId: "+parentReply.getId());
-    			if(countChild != 1) { // 다른 자식댓글이 있는 경우
-    				replysRepository.deleteById(reply.getId());
-        		}else if(countChild == 1){// 다른 자식댓글이 없을 경우
-        			replysRepository.deleteById(parentReply.getId()); // 부모댓글 삭제
-        			replysRepository.deleteById(reply.getId()); // 자식댓글 삭제
-        		}	
-    		}else { // 부모댓글이 있는 경우
-    			replysRepository.deleteById(reply.getId());
+    		// 부모댓글이 없을 경우
+    		if(parentReply.getStatus() == 17) {
+    			
+    			if(countChild == 1) { // 다른 자식댓글이 있는 경우
+    				replysRepository.deleteById(parentReply.getId());
+        		}
+    			
     		}
+    		
+    		replysRepository.deleteById(reply.getId());
+    		
     		
     	}
     }
